@@ -2,17 +2,17 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delybot">
 
     <!-- BOX PROPERTIES -->
-    <xacro:property name="box_width" value="0.61" />
-    <xacro:property name="box_depth" value="0.762" />
-    <xacro:property name="box_height" value="0.737" />
+    <xacro:property name="box_width" value="0.45" />
+    <xacro:property name="box_depth" value="0.63" />
+    <xacro:property name="box_height" value="0.54" />
     <xacro:property name="box_mass" value="42" /> 
 
     <!-- WHEEL PROPERTIES -->
-    <xacro:property name="wheel_radius" value="0.08" />
-    <xacro:property name="wheel_width" value="0.03" />
-    <xacro:property name="wheel_offset_from_bottom_chassis" value="0.01" />
-    <xacro:property name="wheel_offset_from_front_chassis" value="0.02" />
-    <xacro:property name="wheel_offset_from_back_chassis" value="0.02" />
+    <xacro:property name="wheel_radius" value="0.11" />
+    <xacro:property name="wheel_width" value="0.08" />
+    <xacro:property name="wheel_offset_from_bottom_chassis" value="0.0" />
+    <xacro:property name="wheel_offset_from_front_chassis" value="0.0" />
+    <xacro:property name="wheel_offset_from_back_chassis" value="0.0" />
     <xacro:property name="wheel_mass" value="0.5" />
 
     <!-- MACRO DEFINITION -->
