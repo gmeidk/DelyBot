@@ -1,0 +1,24 @@
+<launch>
+  <arg name="model" default="$(find delybot_description)/urdf/delybot.urdf.xacro"/>
+  <arg name="rvizconfig" default="$(find delybot_description)/rviz/urdf.rviz" />
+
+  <include file="$(find delybot_description)/launch/gazebo.launch">
+    <arg name="model" value="$(arg model)" />
+    <arg name="rviz" value="false" />
+  </include>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
+
+  <rosparam command="load"
+            file="$(find delybot_control)/config/delybot_control.yaml"/>
+  <rosparam command="load"
+            file="$(find delybot_control)/config/joint_state.yaml"/>
+
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+  args="joint_state_controller
+        mobile_base_controller"/>
+
+  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <param name="default_topic" value="/mobile_base_controller/cmd_vel"/>
+  </node>
+</launch>
