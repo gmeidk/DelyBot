@@ -38,8 +38,8 @@
             <collision>
                 <origin xyz="0.0 0.0 0.0" rpy="1.57075 0.0 0.0"/>
                 <geometry>
-                   <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
-               </geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+                </geometry>
             </collision>
             <xacro:default_inertial mass="${wheel_mass}"/>
         </link>
@@ -55,7 +55,7 @@
         </joint>
 
         <gazebo reference="${position}_wheel">
-            <material>Gazebo/Black</material>
+            <material>Gazebo/FlatBlack</material>
         </gazebo>
 
         <!-- TRASMISSION DEFINITION -->
@@ -140,13 +140,87 @@
 
     <xacro:wheel_macro position="right_back" x="${-box_depth/2 + wheel_offset_from_front_chassis}" y="${-box_width/2 - wheel_width/2}"/>
 
+    <!-- LIDAR SENSOR -->
+
+    <joint name="scan_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="base_scan"/>
+        <origin xyz="0 0 ${box_height/2 + 0.0315}" rpy="0 0 0"/>
+    </joint>
+
+    <link name="base_scan">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://delybot_description/sensors/lds.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <origin xyz="0.015 0 -0.0065" rpy="0 0 0"/>
+            <geometry>
+                <cylinder length="0.0315" radius="0.055"/>
+            </geometry>
+        </collision>
+
+        <inertial>
+            <mass value="0.114" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+                    iyy="0.001" iyz="0.0"
+                    izz="0.001" />
+        </inertial>
+    </link>
+
+    <gazebo reference="base_scan">
+        <material>Gazebo/FlatBlack</material>
+    </gazebo>    
 
     <!-- GAZEBO PLUGIN -->
+
+
+    <!-- ROS CONTROL PLUGIN -->
 
     <gazebo>
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
             <robotNamespace>/</robotNamespace>
         </plugin>
+    </gazebo>
+
+    <!-- LIDAR SENSOR PLUGIN -->
+
+    <gazebo reference="base_scan">
+        <material>Gazebo/FlatBlack</material>
+        <sensor type="ray" name="lds_lfcd_sensor">
+            <pose>0 0 0 0 0 0</pose>
+            <visualize>true</visualize>
+            <update_rate>5</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>360</samples>
+                        <resolution>1</resolution>
+                        <min_angle>0.0</min_angle>
+                        <max_angle>6.28319</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.120</min>
+                    <max>3.5</max>
+                    <resolution>0.015</resolution>
+                </range>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.01</stddev>
+                </noise>
+            </ray>
+            <plugin name="gazebo_ros_lds_lfcd_controller" filename="libgazebo_ros_laser.so">
+                <topicName>scan</topicName>
+                <frameName>base_scan</frameName>
+            </plugin>
+        </sensor>
     </gazebo>
 
 </robot>
