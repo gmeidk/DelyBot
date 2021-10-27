@@ -26,7 +26,7 @@
     </xacro:macro>
 
     <!-- WHEEL MACRO -->
-    <xacro:macro name="wheel_macro" params="position x y">
+    <xacro:macro name="wheel_macro" params="position x y actuated:=false">
         <link name="${position}_wheel">
             <visual>
                 <material name="black"/>
@@ -65,10 +65,12 @@
             <joint name="${position}_wheel_joint">
                 <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
             </joint>
-            <actuator name="${position}_wheel_joint_motor">
-                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-                <mechanicalReduction>1</mechanicalReduction>
-            </actuator>
+            <xacro:if value="true">
+                <actuator name="${position}_wheel_joint_motor">
+                    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                    <mechanicalReduction>1</mechanicalReduction>
+                </actuator>
+            </xacro:if>
         </transmission>
 
     </xacro:macro>
@@ -118,7 +120,7 @@
 
     <!-- LEFT FRONT WHEEL -->
 
-    <xacro:wheel_macro position="left_front" x="${box_depth/2 - wheel_offset_from_front_chassis}" y="${box_width/2 + wheel_width/2}"/>
+    <xacro:wheel_macro position="left_front" x="${box_depth/2 - wheel_offset_from_front_chassis}" y="${box_width/2 + wheel_width/2}" actuated="true"/>
 
     <!-- LEFT CENTER WHEEL -->
 
@@ -126,11 +128,11 @@
 
     <!-- LEFT BACK WHEEL -->
 
-    <xacro:wheel_macro position="left_back" x="${-box_depth/2 + wheel_offset_from_front_chassis}" y="${box_width/2 + wheel_width/2}"/>
+    <xacro:wheel_macro position="left_back" x="${-box_depth/2 + wheel_offset_from_front_chassis}" y="${box_width/2 + wheel_width/2}" actuated="true"/>
 
     <!-- RIGHT FRONT WHEEL -->
 
-    <xacro:wheel_macro position="right_front" x="${box_depth/2 - wheel_offset_from_front_chassis}" y="${-box_width/2 - wheel_width/2}"/>
+    <xacro:wheel_macro position="right_front" x="${box_depth/2 - wheel_offset_from_front_chassis}" y="${-box_width/2 - wheel_width/2}" actuated="true"/>
 
     <!-- RIGHT CENTER WHEEL -->
 
@@ -138,14 +140,14 @@
 
     <!-- RIGHT BACK WHEEL -->
 
-    <xacro:wheel_macro position="right_back" x="${-box_depth/2 + wheel_offset_from_front_chassis}" y="${-box_width/2 - wheel_width/2}"/>
+    <xacro:wheel_macro position="right_back" x="${-box_depth/2 + wheel_offset_from_front_chassis}" y="${-box_width/2 - wheel_width/2}" actuated="true"/>
 
     <!-- LIDAR SENSOR -->
 
     <joint name="scan_joint" type="fixed">
         <parent link="base_link"/>
         <child link="base_scan"/>
-        <origin xyz="0 0 ${box_height/2 + 0.0315}" rpy="0 0 0"/>
+        <origin xyz="${box_depth/4} 0 ${box_height/2 + 0.0315}" rpy="0 0 0"/>
     </joint>
 
     <link name="base_scan">
@@ -177,6 +179,16 @@
         <material>Gazebo/FlatBlack</material>
     </gazebo>    
 
+    <!-- IMU SENSOR -->
+
+    <link name="imu_link"/>
+
+    <joint name="imu_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="imu_link"/>
+        <origin xyz="0.0 0 ${box_height/2}" rpy="0 0 0"/>
+    </joint>
+
     <!-- GAZEBO PLUGIN -->
 
 
@@ -207,7 +219,7 @@
                 </scan>
                 <range>
                     <min>0.120</min>
-                    <max>3.5</max>
+                    <max>5</max>
                     <resolution>0.015</resolution>
                 </range>
                 <noise>
@@ -222,5 +234,45 @@
             </plugin>
         </sensor>
     </gazebo>
+
+    <!-- IMU PLUGIN -->
+
+    <gazebo reference="imu_link">
+        <sensor type="imu" name="imu">
+            <always_on>true</always_on>
+            <visualize>true</visualize>
+        </sensor>
+        <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo>
+    <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
+        <alwaysOn>true</alwaysOn>
+        <bodyName>imu_link</bodyName>
+        <frameName>imu_link</frameName>
+        <topicName>imu</topicName>
+        <serviceName>imu_service</serviceName>
+        <gaussianNoise>0.0</gaussianNoise>
+        <updateRate>0</updateRate>
+        <imu>
+        <noise>
+            <type>gaussian</type>
+                <rate>
+                    <mean>0.0</mean>
+                    <stddev>2e-4</stddev>
+                    <bias_mean>0.0000075</bias_mean>
+                     <bias_stddev>0.0000008</bias_stddev>
+                </rate>
+                    <accel>
+                       <mean>0.0</mean>
+                        <stddev>1.7e-2</stddev>
+                        <bias_mean>0.1</bias_mean>
+                        <bias_stddev>0.001</bias_stddev>
+                    </accel>
+                </noise>
+            </imu>
+        </plugin>
+    </gazebo>
+
 
 </robot>
