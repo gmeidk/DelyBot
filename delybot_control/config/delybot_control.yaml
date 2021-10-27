@@ -2,8 +2,12 @@ mobile_base_controller:
   type: "diff_drive_controller/DiffDriveController"
   publish_rate: 50
 
+  enable_odom_tf: false  # enable publish on topic /tf
+
   left_wheel: ['left_front_wheel_joint', 'left_center_wheel_joint', 'left_back_wheel_joint']
   right_wheel: ['right_front_wheel_joint', 'right_center_wheel_joint', 'right_back_wheel_joint']
+  # left_wheel: ['left_front_wheel_joint', 'left_back_wheel_joint']
+  # right_wheel: ['right_front_wheel_joint', 'right_back_wheel_joint']
 
   wheel_separation: 0.29
 
@@ -20,12 +24,12 @@ mobile_base_controller:
   linear:
     x:
       has_velocity_limits    : true
-      max_velocity           : 6.67   # m/s
+      max_velocity           : 5     # m/s
       has_acceleration_limits: true
       max_acceleration       : 1.5   # m/s^2
   angular:
     z:
       has_velocity_limits    : true
-      max_velocity           : 2.0   # rad/s
+      max_velocity           : 0.8   # rad/s
       has_acceleration_limits: true
       max_acceleration       : 6.0   # rad/s^2

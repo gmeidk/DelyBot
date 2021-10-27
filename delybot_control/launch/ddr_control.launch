@@ -1,13 +1,14 @@
 <launch>
   <arg name="model" default="$(find delybot_description)/urdf/delybot.urdf.xacro"/>
   <arg name="rvizconfig" default="$(find delybot_description)/rviz/urdf.rviz" />
+  <arg name="open_rviz" default="true" />
 
   <include file="$(find delybot_description)/launch/gazebo.launch">
     <arg name="model" value="$(arg model)" />
     <arg name="rviz" value="false" />
   </include>
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
+  <node if="$(arg open_rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
 
   <rosparam command="load"
             file="$(find delybot_control)/config/delybot_control.yaml"/>

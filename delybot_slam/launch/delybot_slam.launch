@@ -1,0 +1,28 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="slam_methods" default="gmapping" doc="slam type [gmapping, cartographer, hector, karto, frontier_exploration]"/>
+  <arg name="configuration_basename" default="delybot_lds_2d.lua"/>
+  <arg name="open_rviz" default="true"/>
+
+  <!-- Delybot -->
+  <include file="$(find delybot_control)/launch/ddr_control.launch">
+    <arg name="open_rviz" value="false" />
+  </include>
+
+  <!-- SLAM: Gmapping, Cartographer, Hector, Karto, Frontier_exploration, RTAB-Map -->
+  <include file="$(find delybot_slam)/launch/$(arg slam_methods).launch">
+    <arg name="configuration_basename" value="$(arg configuration_basename)"/>
+  </include>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find delybot_slam)/rviz/delybot_$(arg slam_methods).rviz"/>
+  </group>
+
+  <!-- Robot localization-->
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_delybot" clear_params="true">
+    <rosparam command="load" file="$(find delybot_slam)/config/ekf.yaml"/>
+    <remap from="odometry/filtered" to="odom"/>
+  </node>
+</launch>
