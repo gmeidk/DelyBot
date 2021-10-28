@@ -3,9 +3,11 @@
   <arg name="slam_methods" default="gmapping" doc="slam type [gmapping, cartographer, hector, karto, frontier_exploration]"/>
   <arg name="configuration_basename" default="delybot_lds_2d.lua"/>
   <arg name="open_rviz" default="true"/>
+  <arg name="world" default="empty"/>
 
   <!-- Delybot -->
-  <include file="$(find delybot_control)/launch/ddr_control.launch">
+  <include file="$(find delybot_control)/launch/ddr_control.launch" >
+    <arg name="world" value="$(arg world)"/>
     <arg name="open_rviz" value="false" />
   </include>
 
