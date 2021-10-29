@@ -1,0 +1,23 @@
+<launch>
+    <!-- Arguments -->
+    <arg name="map_file" default="$(find delybot_navigation)/maps/delybot_map.yaml"/>
+    <arg name="open_rviz" default="true"/>
+    <arg name="world" default="delybot"/>
+
+    <include file="$(find delybot_control)/launch/ddr_control.launch" >
+        <arg name="world" value="$(arg world)"/>
+        <arg name="open_rviz" value="false" />
+    </include>
+
+    <!-- Map server -->
+    <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+
+    <!-- AMCL -->
+    <include file="$(find delybot_navigation)/launch/amcl.launch"/>
+
+    <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find delybot_navigation)/rviz/delybot_navigation.rviz"/>
+    </group>
+
+</launch>
