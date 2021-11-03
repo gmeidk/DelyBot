@@ -15,6 +15,12 @@
     <!-- AMCL -->
     <include file="$(find delybot_navigation)/launch/amcl.launch"/>
 
+    <!-- move_base -->
+    <include file="$(find delybot_navigation)/launch/move_base.launch">
+        <arg name="cmd_vel_topic" value="/mobile_base_controller/cmd_vel" />
+    </include>
+
+    <!-- rviz -->
     <group if="$(arg open_rviz)"> 
     <node pkg="rviz" type="rviz" name="rviz" required="true"
           args="-d $(find delybot_navigation)/rviz/delybot_navigation.rviz"/>
