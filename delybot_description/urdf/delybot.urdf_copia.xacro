@@ -5,7 +5,7 @@
     <xacro:property name="box_width" value="0.45" />    <!-- Y-->
     <xacro:property name="box_depth" value="0.63" />    <!-- X-->
     <xacro:property name="box_height" value="0.54" />   <!-- Z-->
-    <xacro:property name="box_mass" value="42" />       <!-- original: 42 kg-->
+    <xacro:property name="box_mass" value="42" />  
 
 
     <!-- WHEEL PROPERTIES -->
@@ -14,7 +14,7 @@
     <xacro:property name="wheel_offset_from_bottom_chassis" value="0.0" />
     <xacro:property name="wheel_offset_from_front_chassis" value="0.05" />
     <xacro:property name="wheel_offset_from_back_chassis" value="0.05" />
-    <xacro:property name="wheel_mass" value="0.5" />    <!-- original: 0.5 kg-->
+    <xacro:property name="wheel_mass" value="0.5" />
 
     <!-- MACRO DEFINITION -->
 
@@ -72,12 +72,12 @@
         </link>
 
         <gazebo reference="${position}_wheel">
-            <!-- <mu1 value="100.0"/>
-            <mu2 value="50.0"/> -->
-            <kp value="1000000.0" />  
-            <kd value="1.0" />
-            <selfCollide>true</selfCollide>
-        </gazebo>
+			<mu1 value="1.0"/>
+			<mu2 value="1.0"/>
+			<kp value="10000000.0" />
+			<kd value="1.0" />
+			<fdir1 value="1 0 0"/>
+		</gazebo>
 
         <!-- JOINT DEFINITION -->
 
@@ -102,7 +102,7 @@
             </joint>
             <xacro:if value="true">
                 <actuator name="${position}_wheel_joint_motor">
-                    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
                     <mechanicalReduction>1</mechanicalReduction>
                 </actuator>
             </xacro:if>
@@ -156,11 +156,11 @@
 
     <!-- LEFT FRONT WHEEL -->
 
-    <xacro:wheel_macro position="left_front" x="${box_depth/2 - wheel_offset_from_front_chassis}" y="${box_width/2 + wheel_width/2}" actuated="true"/>
+    <!-- <xacro:wheel_macro position="left_front" x="${box_depth/2 - wheel_offset_from_front_chassis}" y="${box_width/2 + wheel_width/2}" actuated="true"/> -->
 
     <!-- LEFT CENTER WHEEL -->
 
-    <xacro:wheel_macro position="left_center" x="0" y="${box_width/2 + wheel_width/2}"/>
+    <!-- <xacro:wheel_macro position="left_center" x="0" y="${box_width/2 + wheel_width/2}"/> -->
 
     <!-- LEFT BACK WHEEL -->
 
@@ -168,15 +168,80 @@
 
     <!-- RIGHT FRONT WHEEL -->
 
-    <xacro:wheel_macro position="right_front" x="${box_depth/2 - wheel_offset_from_front_chassis}" y="${-box_width/2 - wheel_width/2}" actuated="true"/>
+    <!-- <xacro:wheel_macro position="right_front" x="${box_depth/2 - wheel_offset_from_front_chassis}" y="${-box_width/2 - wheel_width/2}" actuated="true"/> -->
 
     <!-- RIGHT CENTER WHEEL -->
 
-    <xacro:wheel_macro position="right_center" x="0" y="${-box_width/2 - wheel_width/2}"/>
+    <!-- <xacro:wheel_macro position="right_center" x="0" y="${-box_width/2 - wheel_width/2}"/> -->
 
     <!-- RIGHT BACK WHEEL -->
 
     <xacro:wheel_macro position="right_back" x="${-box_depth/2 + wheel_offset_from_front_chassis}" y="${-box_width/2 - wheel_width/2}" actuated="true"/>
+
+    <!-- <link name="caster_front_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0.0 0"/>
+            <geometry>
+                <sphere radius="${wheel_radius}"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <geometry>
+                <sphere radius="${wheel_radius}"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+        </collision>
+        <inertial>
+            <mass value="0.5"/>
+            <origin xyz="0 0 0"/>
+            <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+        </inertial>
+    </link>
+    <joint name="caster_front_joint" type="fixed">
+        <parent link="base_box"/>
+        <child link="caster_front_link"/>
+        <origin rpy="0 0 0" xyz="${box_depth/2 - wheel_radius} 0 3"/>
+    </joint>
+    
+    <gazebo reference="caster_front_link">
+    <turnGravityOff>false</turnGravityOff>
+    </gazebo> -->
+    <link name="caster_wheel">
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <mass value="0.0"/>
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <sphere radius="${wheel_radius}"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <sphere radius="${wheel_radius}"/>
+            </geometry>
+        </collision>
+         <surface>
+        <friction>
+          <ode>
+            <mu1>0</mu1>
+            <mu2>0</mu2>
+            <slip1>1.0</slip1>
+            <slip2>1.0</slip2>
+          </ode>
+        </friction>
+      </surface>
+    </link>
+
+    <joint name="caster_wheel_joint" type="fixed">
+        <origin xyz="${box_depth/2 - wheel_radius} 0.0 -${box_height/2 - wheel_offset_from_bottom_chassis}" rpy="0.0 0.0 0.0"/>
+        <parent link="base_box"/>
+        <child link="caster_wheel"/>
+    </joint>
 
     <!-- LIDAR SENSOR -->
 
@@ -255,7 +320,7 @@
                 </scan>
                 <range>
                     <min>0.120</min>
-                    <max>10</max>
+                    <max>30</max>
                     <resolution>0.015</resolution>
                 </range>
                 <noise>
