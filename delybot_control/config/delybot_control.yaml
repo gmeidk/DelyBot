@@ -4,10 +4,10 @@ mobile_base_controller:
 
   enable_odom_tf: false  # enable publish on topic /tf
 
-  # left_wheel: ['left_front_wheel_joint', 'left_center_wheel_joint', 'left_back_wheel_joint']
-  # right_wheel: ['right_front_wheel_joint', 'right_center_wheel_joint', 'right_back_wheel_joint']
-  left_wheel: ['left_front_wheel_joint', 'left_back_wheel_joint']
-  right_wheel: ['right_front_wheel_joint', 'right_back_wheel_joint']
+  left_wheel: ['left_front_wheel_joint', 'left_center_wheel_joint', 'left_back_wheel_joint']
+  right_wheel: ['right_front_wheel_joint', 'right_center_wheel_joint', 'right_back_wheel_joint']
+  # left_wheel: ['left_front_wheel_joint', 'left_back_wheel_joint']
+  # right_wheel: ['right_front_wheel_joint', 'right_back_wheel_joint']
   # left_wheel: ['left_back_wheel_joint']
   # right_wheel: ['right_back_wheel_joint']
 
@@ -32,6 +32,6 @@ mobile_base_controller:
   angular:
     z:
       has_velocity_limits    : true
-      max_velocity           : 2      # rad/s
+      max_velocity           : 1      # rad/s
       has_acceleration_limits: true
       max_acceleration       : 6.0   # rad/s^2

@@ -14,7 +14,7 @@
     <xacro:property name="wheel_offset_from_bottom_chassis" value="0.0" />
     <xacro:property name="wheel_offset_from_front_chassis" value="0.05" />
     <xacro:property name="wheel_offset_from_back_chassis" value="0.05" />
-    <xacro:property name="wheel_mass" value="0.01" />    <!-- original: 0.5 kg-->
+    <xacro:property name="wheel_mass" value="0.5" />    <!-- original: 0.5 kg-->
 
     <!-- MACRO DEFINITION -->
 
@@ -74,7 +74,7 @@
         <gazebo reference="${position}_wheel">
             <!-- <mu1 value="100.0"/>
             <mu2 value="50.0"/> -->
-            <kp value="1000000.0" />     <!-- 500000 -->
+            <kp value="1000000.0" />  
             <kd value="1.0" />
             <selfCollide>true</selfCollide>
         </gazebo>
@@ -102,7 +102,7 @@
             </joint>
             <xacro:if value="true">
                 <actuator name="${position}_wheel_joint_motor">
-                    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+                    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
                     <mechanicalReduction>1</mechanicalReduction>
                 </actuator>
             </xacro:if>
@@ -160,7 +160,7 @@
 
     <!-- LEFT CENTER WHEEL -->
 
-    <!-- <xacro:wheel_macro position="left_center" x="0" y="${box_width/2 + wheel_width/2}"/> -->
+    <xacro:wheel_macro position="left_center" x="0" y="${box_width/2 + wheel_width/2}"/>
 
     <!-- LEFT BACK WHEEL -->
 
@@ -172,7 +172,7 @@
 
     <!-- RIGHT CENTER WHEEL -->
 
-    <!-- <xacro:wheel_macro position="right_center" x="0" y="${-box_width/2 - wheel_width/2}"/> -->
+    <xacro:wheel_macro position="right_center" x="0" y="${-box_width/2 - wheel_width/2}"/>
 
     <!-- RIGHT BACK WHEEL -->
 
