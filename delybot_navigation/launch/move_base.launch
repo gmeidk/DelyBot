@@ -2,16 +2,19 @@
   <!-- Arguments -->
   <arg name="cmd_vel_topic" default="/cmd_vel" />
   <arg name="odom_topic" default="odom" />
+  <arg name="dwa_local_planner" default="true" />
 
   <!-- move_base -->
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+    <param if="$(arg dwa_local_planner)" name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+    <param unless="$(arg dwa_local_planner)" name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS" />
     <rosparam file="$(find delybot_navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find delybot_navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
     <rosparam file="$(find delybot_navigation)/param/local_costmap_params.yaml" command="load" />
     <rosparam file="$(find delybot_navigation)/param/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find delybot_navigation)/param/move_base_params.yaml" command="load" />
-    <rosparam file="$(find delybot_navigation)/param/dwa_local_planner_params.yaml" command="load" />
+    <rosparam if="$(arg dwa_local_planner)" file="$(find delybot_navigation)/param/dwa_local_planner_params.yaml" command="load" />
+    <rosparam unless="$(arg dwa_local_planner)" file="$(find delybot_navigation)/param/trajectory_rollout_local_planner.yaml" command="load" />
     <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
     <remap from="odom" to="$(arg odom_topic)"/>
   </node>
