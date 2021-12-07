@@ -1912,35 +1912,9 @@
       </camera>
     </gui>
 
-<!-- Create a static collision model -->
-<model name="human_94763_collision_model">
-  <pose>0 0 -100 0 0 0</pose>
-  <static>true</static>
-  <link name="link">
-    <collision name="link">
-      <pose>0 -0.18 0.05 0 -1.5707963267948966 0</pose>
-      <geometry>
-        <box>
-          <size>0.44 1.62 0.60</size>
-        </box>
-      </geometry>
-    </collision>
-  </link>
-</model>
 
 <!-- Create your actor -->
 <actor name="human_94763">
-
-  <!-- Starting pose, nice for when the world is reset -->
-  <pose>
-    12.1254
-    5.385326
-    1.0
-    1.570796
-    -0.0
-    3.141593
-  </pose>
-
   <!-- Actor visual model -->
   <skin>
     <filename>walk.dae</filename>
@@ -1957,37 +1931,26 @@
         <trajectory id="0" type="walking">
           <waypoint>
             <time>0</time>
-            <pose>5 2 0 0 0 -1.57</pose>
+            <pose>5 6 0 0 0 -1.57</pose>
           </waypoint>
           <waypoint>
-            <time>2</time>
-            <pose>5 -2 0 0 0 -1.57</pose>
+            <time>12</time>
+            <pose>5 -6 0 0 0 -1.57</pose>
           </waypoint>
           <waypoint>
-            <time>2.5</time>
-            <pose>5 -2 0 0 0 1.57</pose>
+            <time>14</time>
+            <pose>5 -6 0 0 0 1.57</pose>
           </waypoint>
           <waypoint>
-            <time>7</time>
-            <pose>5 2 0 0 0 1.57</pose>
+            <time>26</time>
+            <pose>5 6 0 0 0 1.57</pose>
           </waypoint>
           <waypoint>
-            <time>7.5</time>
-            <pose>5 2 0 0 0 -1.57</pose>
+            <time>28</time>
+            <pose>5 6 0 0 0 -1.57</pose>
           </waypoint>
         </trajectory>
       </script>
-
-    <!-- Actor Plugin -->
-    <!-- Enable collisions -->
-    <plugin name="attach_model" filename="libAttachModelPlugin.so">
-      <link>
-        <link_name>human_94763_pose</link_name>
-        <model>
-          <model_name>human_94763_collision_model</model_name>
-        </model>
-      </link>
-    </plugin>
 
 </actor>
 
