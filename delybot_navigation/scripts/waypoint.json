@@ -1,8 +1,9 @@
 [
   {
+    "name": "Origin",
     "pose": {
-      "position_x": 1,
-      "position_y": 1,
+      "position_x": 0,
+      "position_y": 0,
       "position_z": 0,
       "orientation_x": 0,
       "orientation_y": 0,
@@ -11,9 +12,10 @@
     }
   },
   {
+    "name": "School",
     "pose": {
-      "position_x": 2,
-      "position_y": 2,
+      "position_x": 32,
+      "position_y": 13,
       "position_z": 0,
       "orientation_x": 0,
       "orientation_y": 0,
@@ -22,9 +24,58 @@
     }
   },
   {
+    "name": "Fast Food",
     "pose": {
-      "position_x": 3,
-      "position_y": 3,
+      "position_x": 7.4,
+      "position_y": -6.8,
+      "position_z": 0,
+      "orientation_x": 0,
+      "orientation_y": 0,
+      "orientation_z": 0,
+      "orientation_w": 1
+    }
+  },
+  {
+    "name": "Police",
+    "pose": {
+      "position_x": 20,
+      "position_y": 11,
+      "position_z": 0,
+      "orientation_x": 0,
+      "orientation_y": 0,
+      "orientation_z": 0,
+      "orientation_w": 1
+    }
+  },
+  {
+    "name": "Post Office",
+    "pose": {
+      "position_x": 5,
+      "position_y": 11,
+      "position_z": 0,
+      "orientation_x": 0,
+      "orientation_y": 0,
+      "orientation_z": 0,
+      "orientation_w": 1
+    }
+  },
+  {
+    "name": "Home 1",
+    "pose": {
+      "position_x": -22.7,
+      "position_y": 11.4,
+      "position_z": 0,
+      "orientation_x": 0,
+      "orientation_y": 0,
+      "orientation_z": 0,
+      "orientation_w": 1
+    }
+  },
+  {
+    "name": "Home 2",
+    "pose": {
+      "position_x": 22.83,
+      "position_y": -3.34,
       "position_z": 0,
       "orientation_x": 0,
       "orientation_y": 0,

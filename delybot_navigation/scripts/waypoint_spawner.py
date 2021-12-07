@@ -3,24 +3,31 @@
 import actionlib
 import rospy
 import json
-from geometry_msgs.msg import PoseStamped
-from actionlib_msgs.msg import GoalStatusArray
-from move_base_msgs.msg import MoveBaseActionGoal, MoveBaseGoal, MoveBaseAction
-from actionlib import SimpleActionClient
+from move_base_msgs.msg import  MoveBaseGoal, MoveBaseAction
+
 
 
 ### JSON UTILS ###
+
 from dataclasses import dataclass
 from typing import Any, List, TypeVar, Type, cast, Callable
-
-from rospy import client
 
 
 T = TypeVar("T")
 
 
-def from_int(x: Any) -> int:
-    assert isinstance(x, int) and not isinstance(x, bool)
+def from_float(x: Any) -> float:
+    assert isinstance(x, (float, int)) and not isinstance(x, bool)
+    return float(x)
+
+
+def to_float(x: Any) -> float:
+    assert isinstance(x, float)
+    return x
+
+
+def from_str(x: Any) -> str:
+    assert isinstance(x, str)
     return x
 
 
@@ -36,50 +43,53 @@ def from_list(f: Callable[[Any], T], x: Any) -> List[T]:
 
 @dataclass
 class Pose:
-    position_x: int
-    position_y: int
-    position_z: int
-    orientation_x: int
-    orientation_y: int
-    orientation_z: int
-    orientation_w: int
+    position_x: float
+    position_y: float
+    position_z: float
+    orientation_x: float
+    orientation_y: float
+    orientation_z: float
+    orientation_w: float
 
     @staticmethod
     def from_dict(obj: Any) -> 'Pose':
         assert isinstance(obj, dict)
-        position_x = from_int(obj.get("position_x"))
-        position_y = from_int(obj.get("position_y"))
-        position_z = from_int(obj.get("position_z"))
-        orientation_x = from_int(obj.get("orientation_x"))
-        orientation_y = from_int(obj.get("orientation_y"))
-        orientation_z = from_int(obj.get("orientation_z"))
-        orientation_w = from_int(obj.get("orientation_w"))
+        position_x = from_float(obj.get("position_x"))
+        position_y = from_float(obj.get("position_y"))
+        position_z = from_float(obj.get("position_z"))
+        orientation_x = from_float(obj.get("orientation_x"))
+        orientation_y = from_float(obj.get("orientation_y"))
+        orientation_z = from_float(obj.get("orientation_z"))
+        orientation_w = from_float(obj.get("orientation_w"))
         return Pose(position_x, position_y, position_z, orientation_x, orientation_y, orientation_z, orientation_w)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["position_x"] = from_int(self.position_x)
-        result["position_y"] = from_int(self.position_y)
-        result["position_z"] = from_int(self.position_z)
-        result["orientation_x"] = from_int(self.orientation_x)
-        result["orientation_y"] = from_int(self.orientation_y)
-        result["orientation_z"] = from_int(self.orientation_z)
-        result["orientation_w"] = from_int(self.orientation_w)
+        result["position_x"] = to_float(self.position_x)
+        result["position_y"] = to_float(self.position_y)
+        result["position_z"] = to_float(self.position_z)
+        result["orientation_x"] = to_float(self.orientation_x)
+        result["orientation_y"] = to_float(self.orientation_y)
+        result["orientation_z"] = to_float(self.orientation_z)
+        result["orientation_w"] = to_float(self.orientation_w)
         return result
 
 
 @dataclass
 class GoalElement:
+    name: str
     pose: Pose
 
     @staticmethod
     def from_dict(obj: Any) -> 'GoalElement':
         assert isinstance(obj, dict)
+        name = from_str(obj.get("name"))
         pose = Pose.from_dict(obj.get("pose"))
-        return GoalElement(pose)
+        return GoalElement(name, pose)
 
     def to_dict(self) -> dict:
         result: dict = {}
+        result["name"] = from_str(self.name)
         result["pose"] = to_class(Pose, self.pose)
         return result
 
@@ -92,66 +102,6 @@ def goal_to_dict(x: List[GoalElement]) -> Any:
     return from_list(lambda x: to_class(GoalElement, x), x)
 
 
-
-
-
-### WAYPOINT SPAWNER ###
-# i = 0
-
-# def callback(data):
-
-#     if data.status_list: 
-#         status = data.status_list[0].status
-#     else:
-#         status = 3
-
-#     if not goal_list:
-#         #rospy.loginfo("Execution completed.")
-#         pass
-
-#     if status == 3 and goal_list:
-#         global i
-
-#         goal = goal_list.pop(0)
-
-#         pub = rospy.Publisher('/move_base/goal', MoveBaseActionGoal, queue_size=10)
-#         goal_msg = MoveBaseActionGoal()
-
-#         rospy.loginfo("STATUS LIST")
-#         rospy.loginfo(data.status_list)
-
-#         # Header
-#         goal_msg.goal.target_pose.header.stamp = rospy.Time.now()
-#         goal_msg.goal.target_pose.header.frame_id = "map"
-#         # Position
-#         goal_msg.goal.target_pose.pose.position.x = goal.pose.position_x
-#         goal_msg.goal.target_pose.pose.position.y = goal.pose.position_y
-#         goal_msg.goal.target_pose.pose.position.z = goal.pose.position_z
-#         # Orientation
-#         goal_msg.goal.target_pose.pose.orientation.x = goal.pose.orientation_x
-#         goal_msg.goal.target_pose.pose.orientation.y = goal.pose.orientation_y
-#         goal_msg.goal.target_pose.pose.orientation.z = goal.pose.orientation_z
-#         goal_msg.goal.target_pose.pose.orientation.w = goal.pose.orientation_w
-
-#         goal_msg.goal_id.stamp = rospy.Time.now()
-#         goal_msg.goal_id.id = str(i)
-#         goal_msg.header.stamp = rospy.Time.now()
-#         goal_msg.header.frame_id = "map"
-
-#         rospy.loginfo("GOAL MSG")
-#         rospy.loginfo(goal_msg)
-#         pub.publish(goal_msg)
-
-#         i += 1
-
-# def waypoint_spawner():
-    
-#     rospy.init_node('waypoint_spawner', anonymous=True)
-
-#     rospy.Subscriber("/move_base/status", GoalStatusArray, callback)
-
-#     rospy.spin()
-        
 def waypoint_spawner():
 
     client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
@@ -193,13 +143,28 @@ if __name__ == '__main__':
 
         rospy.init_node('waypoint_spawner')
 
-        while goal_list:
+        while True:
+            print("\nGOAL LIST:")
+            for idx, goal in enumerate(goal_list):
+                print(f"{idx}) {goal.name}")
+            
+            value = input("\nInsert goal index: ")
+            
+            if value.isdigit():
+                value_parsed = int(value)
 
-            goal = goal_list.pop(0)
+            while not( value.isdigit() and value_parsed in range(len(goal_list))):
+                print(f"Error: the input must be an integer between 0 and {len(goal_list) - 1}")
+                value = input("Insert goal index: ")
+            
+                if value.isdigit():
+                    value_parsed = int(value)
+
+            goal = goal_list[value_parsed]
             result = waypoint_spawner()
 
             if result:
-                rospy.loginfo(f"(x: {goal.pose.position_x}, y: {goal.pose.position_y}) Goal execution done!")
+                rospy.loginfo(f"\n({goal.name} x: {goal.pose.position_x}, y: {goal.pose.position_y}) Goal execution done!\n")
 
     except rospy.ROSInterruptException:
         pass
