@@ -1,55 +1,50 @@
 <launch>
-  <arg name="model" default="$(find delybot_description)/urdf/delybot.urdf.xacro"/>
+  <arg name="model" default="$(find delybot_description)/urdf/delybot.urdf.xacro" />
   <arg name="rvizconfig" default="$(find delybot_control)/rviz/delybot_control.rviz" />
   <arg name="open_rviz" default="true" />
-  <arg name="world" default="empty"/>
+  <arg name="world" default="empty" />
 
   <!-- Gazebo parameters -->
-  <arg name="paused" default="false"/>
-  <arg name="use_sim_time" default="true"/>
-  <arg name="gui" default="true"/>
-  <arg name="headless" default="false"/>
-  <arg name="debug" default="false"/>
+  <arg name="paused" default="false" />
+  <arg name="use_sim_time" default="true" />
+  <arg name="gui" default="true" />
+  <arg name="headless" default="false" />
+  <arg name="debug" default="false" />
 
   <!-- launch Gazebo -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="debug" value="$(arg debug)" />
     <arg name="gui" value="$(arg gui)" />
-    <arg name="paused" value="$(arg paused)"/>
-    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
-    <arg name="headless" value="$(arg headless)"/>
-    <arg name="world_name" value="$(find delybot_description)/world/$(arg world).world"/>
+    <arg name="paused" value="$(arg paused)" />
+    <arg name="use_sim_time" value="$(arg use_sim_time)" />
+    <arg name="headless" value="$(arg headless)" />
+    <arg name="world_name" value="$(find delybot_description)/world/$(arg world).world" />
   </include>
 
   <!-- Load delybot.urdf-->
-  <param name="robot_description"
-  command="xacro '$(find delybot_description)/urdf/delybot.urdf.xacro'" />
+  <param name="robot_description" command="xacro '$(find delybot_description)/urdf/delybot.urdf.xacro'" />
 
   <!-- push robot_description to factory and spawn robot in gazebo -->
-  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
-        args="-z 1.0 -unpause -urdf -model robot -param robot_description" respawn="false" output="screen" />
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-z 1.0 -unpause -urdf -model robot -param robot_description" respawn="false" output="screen" />
 
-  <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
     <param name="publish_frequency" type="double" value="30.0" />
   </node>
 
-  <rosparam command="load"
-            file="$(find delybot_control)/config/delybot_control.yaml"/>
-  <rosparam command="load"
-            file="$(find delybot_control)/config/joint_state.yaml"/>
+  <rosparam command="load" file="$(find delybot_control)/config/delybot_control.yaml" />
+  <rosparam command="load" file="$(find delybot_control)/config/joint_state.yaml" />
 
-  <node name="controller_spawner" pkg="controller_manager" type="spawner"
-  args="joint_state_controller
-        mobile_base_controller"/>
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" args="joint_state_controller
+        mobile_base_controller" />
 
   <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
-    <param name="default_topic" value="/mobile_base_controller/cmd_vel"/>
+    <param name="default_topic" value="/mobile_base_controller/cmd_vel" />
   </node>
 
   <!-- Robot localization-->
   <node pkg="robot_localization" type="ekf_localization_node" name="ekf_delybot" clear_params="true">
-    <rosparam command="load" file="$(find delybot_control)/config/ekf.yaml"/>
-    <remap from="odometry/filtered" to="odom"/>
+    <rosparam command="load" file="$(find delybot_control)/config/ekf.yaml" />
+    <remap from="odometry/filtered" to="odom" />
   </node>
 
   <node if="$(arg open_rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />

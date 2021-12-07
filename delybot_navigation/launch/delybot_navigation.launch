@@ -1,31 +1,30 @@
 <launch>
     <!-- Arguments -->
-    <arg name="map_file" default="$(find delybot_navigation)/maps/delybot_map.yaml"/>
-    <arg name="open_rviz" default="true"/>
-    <arg name="world" default="delybot_test"/>
-    <arg name="dwa_local_planner" default="true"/>
+    <!-- <arg name="map_file" default="$(find delybot_navigation)/maps/delybot_map.yaml"/> -->
+    <arg name="open_rviz" default="true" />
+    <arg name="world" default="delybot_test" />
+    <arg name="dwa_local_planner" default="true" />
 
-    <include file="$(find delybot_control)/launch/ddr_control.launch" >
-        <arg name="world" value="$(arg world)"/>
+    <include file="$(find delybot_control)/launch/ddr_control.launch">
+        <arg name="world" value="$(arg world)" />
         <arg name="open_rviz" value="false" />
     </include>
 
     <!-- Map server -->
-    <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+    <node pkg="map_server" name="map_server" type="map_server" args="$(find delybot_navigation)/maps/$(arg world).yaml" />
 
     <!-- AMCL -->
-    <include file="$(find delybot_navigation)/launch/amcl.launch"/>
+    <include file="$(find delybot_navigation)/launch/amcl.launch" />
 
     <!-- move_base -->
-    <include file="$(find delybot_navigation)/launch/move_base.launch"> 
+    <include file="$(find delybot_navigation)/launch/move_base.launch">
         <arg name="cmd_vel_topic" value="/mobile_base_controller/cmd_vel" />
         <arg name="dwa_local_planner" value="$(arg dwa_local_planner)" />
     </include>
 
     <!-- rviz -->
-    <group if="$(arg open_rviz)"> 
-    <node pkg="rviz" type="rviz" name="rviz" required="true"
-          args="-d $(find delybot_navigation)/rviz/delybot_navigation.rviz"/>
+    <group if="$(arg open_rviz)">
+        <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find delybot_navigation)/rviz/delybot_navigation.rviz" />
     </group>
 
 </launch>

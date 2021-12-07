@@ -12,34 +12,34 @@
     }
   },
   {
-    "name": "School",
+    "name": "Thrift Shop",
     "pose": {
-      "position_x": 32,
-      "position_y": 13,
+      "position_x": -36.26,
+      "position_y": -2.68,
       "position_z": 0,
       "orientation_x": 0,
       "orientation_y": 0,
-      "orientation_z": 0,
-      "orientation_w": 1
+      "orientation_z": -0.70,
+      "orientation_w": 0.72
     }
   },
   {
-    "name": "Fast Food",
+    "name": "Salon",
     "pose": {
-      "position_x": 7.4,
-      "position_y": -6.8,
+      "position_x": -16.04,
+      "position_y": -2.52,
       "position_z": 0,
       "orientation_x": 0,
       "orientation_y": 0,
-      "orientation_z": 0,
-      "orientation_w": 1
+      "orientation_z": -0.69,
+      "orientation_w": 0.73
     }
   },
   {
-    "name": "Police",
+    "name": "Home",
     "pose": {
-      "position_x": 20,
-      "position_y": 11,
+      "position_x": -1.41,
+      "position_y": -2.34,
       "position_z": 0,
       "orientation_x": 0,
       "orientation_y": 0,
@@ -50,8 +50,8 @@
   {
     "name": "Post Office",
     "pose": {
-      "position_x": 5,
-      "position_y": 11,
+      "position_x": 15.23,
+      "position_y": -4.96,
       "position_z": 0,
       "orientation_x": 0,
       "orientation_y": 0,
@@ -60,10 +60,22 @@
     }
   },
   {
-    "name": "Home 1",
+    "name": "Police",
     "pose": {
-      "position_x": -22.7,
-      "position_y": 11.4,
+      "position_x": 22.65,
+      "position_y": 11.04,
+      "position_z": 0,
+      "orientation_x": 0,
+      "orientation_y": 0,
+      "orientation_z": -1,
+      "orientation_w": 0
+    }
+  },
+  {
+    "name": "School",
+    "pose": {
+      "position_x": -11.33,
+      "position_y": 25.22,
       "position_z": 0,
       "orientation_x": 0,
       "orientation_y": 0,
@@ -72,15 +84,15 @@
     }
   },
   {
-    "name": "Home 2",
+    "name": "Fast Food",
     "pose": {
-      "position_x": 22.83,
-      "position_y": -3.34,
+      "position_x": -34.53,
+      "position_y": 14.41,
       "position_z": 0,
       "orientation_x": 0,
       "orientation_y": 0,
-      "orientation_z": 0,
-      "orientation_w": 1
+      "orientation_z": -0.70,
+      "orientation_w": 0.71
     }
   }
 ]

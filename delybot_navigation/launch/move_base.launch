@@ -15,7 +15,7 @@
     <rosparam file="$(find delybot_navigation)/param/move_base_params.yaml" command="load" />
     <rosparam if="$(arg dwa_local_planner)" file="$(find delybot_navigation)/param/dwa_local_planner_params.yaml" command="load" />
     <rosparam unless="$(arg dwa_local_planner)" file="$(find delybot_navigation)/param/trajectory_rollout_local_planner.yaml" command="load" />
-    <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
-    <remap from="odom" to="$(arg odom_topic)"/>
+    <remap from="cmd_vel" to="$(arg cmd_vel_topic)" />
+    <remap from="odom" to="$(arg odom_topic)" />
   </node>
 </launch>

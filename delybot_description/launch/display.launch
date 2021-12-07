@@ -1,13 +1,12 @@
 <launch>
 
-  <arg name="model" default="$(find delybot_description)/urdf/delybot.urdf"/>
+  <arg name="model" default="$(find delybot_description)/urdf/delybot.urdf" />
   <arg name="gui" default="true" />
   <arg name="rvizconfig" default="$(find delybot_description)/rviz/urdf.rviz" />
-  <arg name="robot_state_publisher" default="true"/>
+  <arg name="robot_state_publisher" default="true" />
 
   <!-- <param name="robot_description" command="$(find xacro)/xacro $(arg model)" /> -->
-  <param name="robot_description"
-  command="xacro '$(find delybot_description)/urdf/delybot.urdf.xacro'" />
+  <param name="robot_description" command="xacro '$(find delybot_description)/urdf/delybot.urdf.xacro'" />
 
 
   <node if="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
