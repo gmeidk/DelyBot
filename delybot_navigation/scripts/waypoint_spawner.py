@@ -1,15 +1,19 @@
 #!/usr/bin python3
 # license removed for brevity
+import actionlib
 import rospy
 import json
 from geometry_msgs.msg import PoseStamped
 from actionlib_msgs.msg import GoalStatusArray
-from move_base_msgs.msg import MoveBaseActionGoal,MoveBaseGoal
+from move_base_msgs.msg import MoveBaseActionGoal, MoveBaseGoal, MoveBaseAction
+from actionlib import SimpleActionClient
 
 
 ### JSON UTILS ###
 from dataclasses import dataclass
 from typing import Any, List, TypeVar, Type, cast, Callable
+
+from rospy import client
 
 
 T = TypeVar("T")
@@ -88,61 +92,97 @@ def goal_to_dict(x: List[GoalElement]) -> Any:
     return from_list(lambda x: to_class(GoalElement, x), x)
 
 
+
+
+
 ### WAYPOINT SPAWNER ###
-id = 0
+# i = 0
 
-def callback(data):
+# def callback(data):
 
-    if data.status_list: 
-        status = data.status_list[0].status
-    else:
-        status = 3
+#     if data.status_list: 
+#         status = data.status_list[0].status
+#     else:
+#         status = 3
 
-    if not goal_list:
-        #rospy.loginfo("Execution completed.")
-        pass
+#     if not goal_list:
+#         #rospy.loginfo("Execution completed.")
+#         pass
 
-    if status == 3 and goal_list:
-        global id
+#     if status == 3 and goal_list:
+#         global i
 
-        goal = goal_list.pop(0)
+#         goal = goal_list.pop(0)
 
-        pub = rospy.Publisher('/move_base/goal', MoveBaseActionGoal, queue_size=10)
-        goal_msg = MoveBaseActionGoal()
+#         pub = rospy.Publisher('/move_base/goal', MoveBaseActionGoal, queue_size=10)
+#         goal_msg = MoveBaseActionGoal()
 
-        rospy.loginfo(data.status_list)
+#         rospy.loginfo("STATUS LIST")
+#         rospy.loginfo(data.status_list)
 
-        # Header
-        goal_msg.goal.target_pose.header.stamp = rospy.Time.now()
-        goal_msg.goal.target_pose.header.frame_id = "map"
-        # Position
-        goal_msg.goal.target_pose.pose.position.x = goal.pose.position_x
-        goal_msg.goal.target_pose.pose.position.y = goal.pose.position_y
-        goal_msg.goal.target_pose.pose.position.z = goal.pose.position_z
-        # Orientation
-        goal_msg.goal.target_pose.pose.orientation.x = goal.pose.orientation_x
-        goal_msg.goal.target_pose.pose.orientation.y = goal.pose.orientation_y
-        goal_msg.goal.target_pose.pose.orientation.z = goal.pose.orientation_z
-        goal_msg.goal.target_pose.pose.orientation.w = goal.pose.orientation_w
+#         # Header
+#         goal_msg.goal.target_pose.header.stamp = rospy.Time.now()
+#         goal_msg.goal.target_pose.header.frame_id = "map"
+#         # Position
+#         goal_msg.goal.target_pose.pose.position.x = goal.pose.position_x
+#         goal_msg.goal.target_pose.pose.position.y = goal.pose.position_y
+#         goal_msg.goal.target_pose.pose.position.z = goal.pose.position_z
+#         # Orientation
+#         goal_msg.goal.target_pose.pose.orientation.x = goal.pose.orientation_x
+#         goal_msg.goal.target_pose.pose.orientation.y = goal.pose.orientation_y
+#         goal_msg.goal.target_pose.pose.orientation.z = goal.pose.orientation_z
+#         goal_msg.goal.target_pose.pose.orientation.w = goal.pose.orientation_w
 
-        goal_msg.goal_id.stamp = rospy.Time.now()
-        goal_msg.goal_id.id = str(id)
-        goal_msg.header.stamp = rospy.Time.now()
-        goal_msg.header.frame_id = "map"
+#         goal_msg.goal_id.stamp = rospy.Time.now()
+#         goal_msg.goal_id.id = str(i)
+#         goal_msg.header.stamp = rospy.Time.now()
+#         goal_msg.header.frame_id = "map"
 
-        rospy.loginfo(goal_msg)
-        pub.publish(goal_msg)
+#         rospy.loginfo("GOAL MSG")
+#         rospy.loginfo(goal_msg)
+#         pub.publish(goal_msg)
 
-        id = id + 1
+#         i += 1
 
-def waypoint_spawner():
+# def waypoint_spawner():
     
-    rospy.init_node('waypoint_spawner', anonymous=True)
+#     rospy.init_node('waypoint_spawner', anonymous=True)
 
-    rospy.Subscriber("/move_base/status", GoalStatusArray, callback)
+#     rospy.Subscriber("/move_base/status", GoalStatusArray, callback)
 
-    rospy.spin()
+#     rospy.spin()
         
+def waypoint_spawner():
+
+    client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
+
+    client.wait_for_server()
+
+    movebase_goal = MoveBaseGoal()
+    # Header
+    movebase_goal.target_pose.header.stamp = rospy.Time.now()
+    movebase_goal.target_pose.header.frame_id = "map"
+    # Position
+    movebase_goal.target_pose.pose.position.x = goal.pose.position_x
+    movebase_goal.target_pose.pose.position.y = goal.pose.position_y
+    movebase_goal.target_pose.pose.position.z = goal.pose.position_z
+    # Orientation
+    movebase_goal.target_pose.pose.orientation.x = goal.pose.orientation_x
+    movebase_goal.target_pose.pose.orientation.y = goal.pose.orientation_y
+    movebase_goal.target_pose.pose.orientation.z = goal.pose.orientation_z
+    movebase_goal.target_pose.pose.orientation.w = goal.pose.orientation_w
+
+    client.send_goal(movebase_goal)
+
+    wait = client.wait_for_result()
+
+    if not wait:
+        rospy.logerr("Action server not available!")
+        rospy.signal_shutdown("Action server not available!")
+    else:
+        return client.get_result()
+
+
 if __name__ == '__main__':
     try:
 
@@ -151,7 +191,16 @@ if __name__ == '__main__':
 
         rospy.loginfo(f"Waypoint list: {goal_list}")
 
-        waypoint_spawner()
+        rospy.init_node('waypoint_spawner')
+
+        while goal_list:
+
+            goal = goal_list.pop(0)
+            result = waypoint_spawner()
+
+            if result:
+                rospy.loginfo(f"(x: {goal.pose.position_x}, y: {goal.pose.position_y}) Goal execution done!")
+
     except rospy.ROSInterruptException:
         pass
 
