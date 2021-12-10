@@ -12,7 +12,7 @@
 ## About The Project
 
 <br>
-DelyBot is a robot that uses six wheels to drive itself along pedestrian paths but also on public roads to reach required delivery addresses.
+DelyBot is a robot that uses six wheels to drive itself along pedestrian paths but also on public roads to reach requested delivery addresses.
 The robot is able to locate itself through knowledge of the global static map and is able to detect and avoid moving obstacles.
 <br>
 <br>
