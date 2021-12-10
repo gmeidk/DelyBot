@@ -2,7 +2,7 @@
   <arg name="model" default="$(find delybot_description)/urdf/delybot.urdf.xacro" />
   <arg name="rvizconfig" default="$(find delybot_control)/rviz/delybot_control.rviz" />
   <arg name="open_rviz" default="true" />
-  <arg name="world" default="empty" />
+  <arg name="world" default="district" />
 
   <!-- Gazebo parameters -->
   <arg name="paused" default="false" />

@@ -2,7 +2,7 @@
     <!-- Arguments -->
     <!-- <arg name="map_file" default="$(find delybot_navigation)/maps/delybot_map.yaml"/> -->
     <arg name="open_rviz" default="true" />
-    <arg name="world" default="delybot_test" />
+    <arg name="world" default="district" />
     <arg name="dwa_local_planner" default="true" />
 
     <include file="$(find delybot_control)/launch/ddr_control.launch">
