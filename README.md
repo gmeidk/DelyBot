@@ -64,8 +64,9 @@ At first it is necessary to install external packages:
   
 * robot_localization
   ```sh
-  cd ~/catkin_ws
+  cd ~/catkin_ws/src
   git clone https://github.com/cra-ros-pkg/robot_localization.git
+  cd ~/catkin_ws
   catkin_make
   ```
 
@@ -75,11 +76,12 @@ At first it is necessary to install external packages:
 
 1. Clone the repo inside the catkin workspace
    ```sh
-   cd ~/catkin_ws
+   cd ~/catkin_ws/src
    git clone https://github.com/gmeidk/DelyBot.git
    ```
 2. Build packages
    ```sh
+   cd ~/catkin_ws
    catkin_make
    ```
    
