@@ -64,10 +64,7 @@ At first it is necessary to install external packages:
   
 * robot_localization
   ```sh
-  cd ~/catkin_ws/src
-  git clone https://github.com/cra-ros-pkg/robot_localization.git
-  cd ~/catkin_ws
-  catkin_make
+  sudo apt-get install ros-noetic-robot-localization
   ```
 
 <br>
@@ -101,6 +98,7 @@ Open a pre-configured Rviz session to display the robot.
   roslaunch delybot_description gazebo.launch [open_rviz]
   ```
 Spawn the robot into the gazebo simulation environment.
+If the **open_rviz** parameter is *true* a pre-configured Rviz session is also opened.
 
 <br>
 
@@ -131,7 +129,7 @@ The **world** parameter can be used to load a specific world map (the *.world* f
   ```
 This command is used for the robot navigation, it's possible to give through Rviz a desired goal pose. <br>
 The **world** parameter can be used to load a specific world map (the *.world* file must be located in the *delybot_description/world/* folder). <br>
-If the **dwa_local_planner** parameter is *true* the *DWA* local planner is used, else if is *false* the *Trajectory Rollout* local planner. <br>
+If the **dwa_local_planner** parameter is *true* the *DWA* local planner is used, else if it is *false* the *Trajectory Rollout* local planner is used. <br>
 
 
 #### waypoint_spawner node
