@@ -87,6 +87,25 @@ At first it is necessary to install external packages:
 
 <!-- USAGE EXAMPLES -->
 ## Usage
+The possible  **_optional parameter_** values are listed in the table. <br>
+
+| Optional Parameter | Values | Default |
+| --- | :---: | :---: |
+| `open_rviz` | true, false | true |
+| `world` | empty, delybot_test_map, delybot_test, district_map, district | district |
+| `dwa_local_planner` | true, false | true |
+
+<br>
+
+The **world** parameter can be used to load a specific world map (the *.world* file must be located in the *delybot_description/world/* folder). <br>
+To test the different world files in Gazebo it is possible to run the following command:
+  ```sh
+  # Usage example to open district.world in Gazebo
+  roslaunch gazebo_ros empty_world world_name:=/home/your_username/catkin_ws/src/DelyBot/delybot_description/world/district.world
+  ```
+
+<br>
+<br>
 
 ### delybot_description
 
@@ -95,41 +114,40 @@ At first it is necessary to install external packages:
   ```
 Open a pre-configured Rviz session to display the robot.
   ```sh
-  roslaunch delybot_description gazebo.launch [open_rviz]
+  roslaunch delybot_description gazebo.launch open_rviz:=true
   ```
 Spawn the robot into the gazebo simulation environment.
-If the **open_rviz** parameter is *true* a pre-configured Rviz session is also opened.
+If the **open_rviz** optional parameter is *true* a pre-configured Rviz session is also opened.
 
 <br>
 
 ### delybot_control
 
   ```sh
-  roslaunch delybot_control ddr_control.launch [world:= empty, delybot_test, district]
+  roslaunch delybot_control ddr_control.launch world:=district
   ```
 Spawn the robot with a differential drive control and a teleoperation node in gazebo. <br>
-The **world** parameter can be used to load a specific world map (the *.world* file must be located in the *delybot_description/world/* folder).
 
 <br>
 
 ### delybot_slam
 
   ```sh
-  roslaunch delybot_slam delybot_slam.launch [world]
+  roslaunch delybot_slam delybot_slam.launch world:=district_map
   ```
 This command can be useful to create a 2d map of a specific world using a gmapping alghoritm. <br>
-The **world** parameter can be used to load a specific world map (the *.world* file must be located in the *delybot_description/world/* folder).
 
 <br>
 
 ### delybot_navigation
 
   ```sh
-  roslaunch delybot_navigation delybot_navigation.launch [world] [dwa_local_planner]
+  roslaunch delybot_navigation delybot_navigation.launch world:=district dwa_local_planner:=true
   ```
 This command is used for the robot navigation, it's possible to give through Rviz a desired goal pose. <br>
-The **world** parameter can be used to load a specific world map (the *.world* file must be located in the *delybot_description/world/* folder). <br>
-If the **dwa_local_planner** parameter is *true* the *DWA* local planner is used, else if it is *false* the *Trajectory Rollout* local planner is used. <br>
+If the **dwa_local_planner** parameter is *true* the *DWA* local planner is used, else if it is *false* the *Trajectory Rollout* local planner is used. 
+
+<br>
 
 
 #### waypoint_spawner node
@@ -141,6 +159,7 @@ Run waypoint_spawner node used to send a specific goal pose selected from a pred
 The list is imported from the **waypoint.json** file inside the *delybot_navigation/scripts/* folder. <br>
 
   ```sh
+  # Output example
   user@user:~$ rosrun delybot_navigation waypoint_spawner.py 
 
   GOAL LIST:
