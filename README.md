@@ -135,7 +135,7 @@ Spawn the robot with a differential drive control and a teleoperation node in ga
   ```sh
   roslaunch delybot_slam delybot_slam.launch world:=district_map
   ```
-This command can be useful to create a 2d map of a specific world using a gmapping alghoritm. <br>
+This command can be useful to create a 2d map of a specific world using a gmapping algorithm. <br>
 
 <br>
 
@@ -179,7 +179,7 @@ The list is imported from the **waypoint.json** file inside the *delybot_navigat
 ## Roadmap
 
 - [x] 3D robot modeling
-- [x] Add diffrential drive control
+- [x] Add differential drive control
 - [X] Add laser and imu sensors using Kalman filter (pkg: robot_localization) 
 - [X] Add world 3D model with static and moving obstacle 
 - [X] Add delybot slam using gmapping to create 2D world map
