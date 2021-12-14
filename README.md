@@ -155,7 +155,7 @@ If the **dwa_local_planner** parameter is *true* the *DWA* local planner is used
   ```sh
   rosrun delybot_navigation waypoint_spawner.py
   ```
-Run waypoint_spawner node used to send a specific goal pose selected from a predefined list to the robot. <br>
+This command run the waypoint_spawner node, used to send a specific goal pose selected from a predefined list to the robot. <br>
 The list is imported from the **waypoint.json** file inside the *delybot_navigation/scripts/* folder. <br>
 
   ```sh
