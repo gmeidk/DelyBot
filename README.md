@@ -198,10 +198,12 @@ https://user-images.githubusercontent.com/81641638/145631074-0517d654-1828-495e-
 <!-- CONTACT -->
 ## Contact
 
-Alessandro Quatela - [@qualex97](https://github.com/qualex97) - a.quatela1@studenti.poliba.it 
+For further information check the report - [DelyBot Report.pdf](https://bit.ly/3GNdJTN)
 
-Giuseppe Roberto - [@gmeidk](https://github.com/gmeidk) - g.roberto1@studenti.poliba.it
+Alessandro Quatela - [@qualex97](https://bit.ly/3dP01Dp) - a.quatela1@studenti.poliba.it 
 
-Project Link: [https://github.com/gmeidk/DelyBot](https://github.com/gmeidk/DelyBot)
+Giuseppe Roberto - [@gmeidk](https://bit.ly/30rueVT) - g.roberto1@studenti.poliba.it
+
+Project Link: [https://github.com/gmeidk/DelyBot](https://bit.ly/3IO2zji)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
