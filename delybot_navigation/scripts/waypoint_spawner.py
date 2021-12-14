@@ -1,5 +1,6 @@
 #!/usr/bin python3
 # license removed for brevity
+import os
 import actionlib
 import rospy
 import json
@@ -136,7 +137,7 @@ def waypoint_spawner():
 if __name__ == '__main__':
     try:
 
-        f = open ('/home/giuseppe/catkin_ws/src/delybot/delybot_navigation/scripts/waypoint.json', "r")
+        f = open (os.getenv('HOME') + '/catkin_ws/src/DelyBot/delybot_navigation/scripts/waypoint.json', "r")
         goal_list = goal_from_dict(json.loads(f.read()))
 
         rospy.loginfo(f"Waypoint list: {goal_list}")
